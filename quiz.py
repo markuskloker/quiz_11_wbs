@@ -16,8 +16,13 @@ if "antwortende_gruppen" not in st.session_state:
 
 # --- Reset-Button ---
 if st.button("🔄 Quiz zurücksetzen"):
-    st.session_state.clear()
-    st.experimental_rerun()
+    st.session_state["beantwortet"] = {}
+    st.session_state["ausgewählte_frage"] = None
+    st.session_state["punkte_A"] = 0
+    st.session_state["punkte_B"] = 0
+    st.session_state["aktive_gruppe"] = "A"
+    st.session_state["antwortende_gruppen"] = {}
+    st.success("Quiz wurde erfolgreich zurückgesetzt.")
 
 # --- Punktestand ---
 st.markdown("### 🎯 Punktestand")
