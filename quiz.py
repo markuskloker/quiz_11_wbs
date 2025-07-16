@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Session-State initialisieren ---
+# --- Session-State Initialisierung ---
 if "beantwortet" not in st.session_state:
     st.session_state["beantwortet"] = {}
 if "ausgewählte_frage" not in st.session_state:
@@ -11,108 +11,99 @@ if "punkte_B" not in st.session_state:
     st.session_state["punkte_B"] = 0
 if "aktive_gruppe" not in st.session_state:
     st.session_state["aktive_gruppe"] = "A"
+if "antwortende_gruppen" not in st.session_state:
+    st.session_state["antwortende_gruppen"] = {}
 
-# --- Reset-Funktion ---
+# --- Reset ---
 if st.button("🔄 Quiz zurücksetzen"):
-    st.session_state["beantwortet"] = {}
-    st.session_state["ausgewählte_frage"] = None
-    st.session_state["punkte_A"] = 0
-    st.session_state["punkte_B"] = 0
-    st.session_state["aktive_gruppe"] = "A"
-    st.success("Quiz wurde zurückgesetzt.")
+    st.session_state.clear()
+    st.experimental_rerun()
 
-# --- Punktestand & Gruppenanzeige ---
+# --- Punktestand ---
 st.markdown("### 🎯 Punktestand")
 st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
 st.write(f"👥 Aktive Gruppe: **Gruppe {st.session_state['aktive_gruppe']}**")
 
-# --- Fragenstruktur: 4 Kategorien × 4 Fragen mit Erklärung ---
+# --- Fragenstruktur ---
 fragen = {
-    # Soziale Marktwirtschaft
     ("Soziale Marktwirtschaft", 20): {
         "frage": "Welche Rolle spielt der Staat in der sozialen Marktwirtschaft?",
-        "antworten": ["Er greift nicht ein.", "Er plant die Produktion zentral.", "Er sorgt für Ausgleich und reguliert Wettbewerb.", "Er kontrolliert alle Unternehmen."],
+        "antworten": ["Er greift nicht ein.", "Er plant zentral.", "Er sorgt für Ausgleich und reguliert Wettbewerb.", "Er kontrolliert alle Unternehmen."],
         "richtig": 2,
         "erklärung": "Der Staat greift ein, um sozialen Ausgleich zu schaffen und Wettbewerb zu sichern."
     },
     ("Soziale Marktwirtschaft", 40): {
         "frage": "Was versteht man unter 'Ordnungspolitik'?",
-        "antworten": ["Staatliche Preisbindung.", "Staatliche Gestaltung der Rahmenbedingungen.", "Direkte Produktionssteuerung.", "Abschaffung von Wettbewerb."],
+        "antworten": ["Preisbindung", "Staatliche Rahmengestaltung", "Produktionssteuerung", "Wettbewerbsabschaffung"],
         "richtig": 1,
-        "erklärung": "Ordnungspolitik definiert rechtliche Rahmenbedingungen zur Sicherung des Marktes."
+        "erklärung": "Ordnungspolitik schafft Wettbewerbsregeln für den Markt."
     },
     ("Soziale Marktwirtschaft", 60): {
         "frage": "Welche Maßnahme gehört NICHT zur sozialen Marktwirtschaft?",
-        "antworten": ["Subventionen.", "Mindestlöhne.", "Zentrale Produktionsplanung.", "Sozialversicherungen."],
+        "antworten": ["Subventionen", "Mindestlöhne", "Zentrale Planung", "Sozialversicherungen"],
         "richtig": 2,
-        "erklärung": "Zentrale Planung ist ein Element der Planwirtschaft."
+        "erklärung": "Zentrale Planung ist ein Merkmal der Planwirtschaft."
     },
     ("Soziale Marktwirtschaft", 80): {
         "frage": "Was ist ein Ziel der sozialen Marktwirtschaft?",
-        "antworten": ["Abschaffung des Wettbewerbs.", "Förderung von Monopolen.", "Verbindung von Freiheit und Sicherheit.", "Zentralisierung der Wirtschaft."],
+        "antworten": ["Wettbewerb abschaffen", "Monopole fördern", "Freiheit und soziale Sicherheit verbinden", "Planwirtschaft einführen"],
         "richtig": 2,
         "erklärung": "Sie verbindet Marktfreiheit mit sozialem Ausgleich."
     },
-
-    # Wirtschaftswachstum
     ("Wirtschaftswachstum", 20): {
         "frage": "Welche Kennzahl misst das Wirtschaftswachstum?",
-        "antworten": ["Inflationsrate", "Bruttoinlandsprodukt (BIP)", "Arbeitslosenquote", "Handelsbilanz"],
+        "antworten": ["Inflation", "BIP", "Arbeitslosenquote", "Außenhandel"],
         "richtig": 1,
-        "erklärung": "Das BIP zeigt den Gesamtwert aller produzierten Güter und Dienstleistungen."
+        "erklärung": "Das Bruttoinlandsprodukt zeigt die Wirtschaftsleistung eines Landes."
     },
     ("Wirtschaftswachstum", 40): {
-        "frage": "Was bedeutet qualitatives Wachstum?",
-        "antworten": ["Mehr Produktion.", "Wachstum mit Nachhaltigkeit.", "Wachstum durch Subventionen.", "Wachstum nur in Industrie."],
+        "frage": "Was ist qualitatives Wachstum?",
+        "antworten": ["Produktionssteigerung", "Nachhaltiges Wachstum", "Subventioniertes Wachstum", "Industriewachstum"],
         "richtig": 1,
-        "erklärung": "Es soll umweltverträglich und nachhaltig sein."
+        "erklärung": "Qualitatives Wachstum setzt auf Nachhaltigkeit und Ressourcenschonung."
     },
     ("Wirtschaftswachstum", 60): {
-        "frage": "Was ist ein Problem des Wirtschaftswachstums?",
-        "antworten": ["Immer höhere Arbeitslosigkeit.", "Umweltzerstörung und Ressourcenverbrauch.", "Gleichmäßige Branchenverteilung.", "Weniger Innovation."],
+        "frage": "Was beschreibt ein Problem des Wirtschaftswachstums?",
+        "antworten": ["Mehr Arbeitslosigkeit", "Umweltzerstörung und Ressourcenverbrauch", "Branchenübergreifende Gleichverteilung", "Innovationsverlust"],
         "richtig": 1,
-        "erklärung": "Wachstum kann die Umwelt belasten und Ressourcen verbrauchen."
+        "erklärung": "Wirtschaftswachstum kann die Umwelt stark belasten."
     },
     ("Wirtschaftswachstum", 80): {
-        "frage": "Was fördert nachhaltiges Wachstum?",
-        "antworten": ["Ausbeutung von Ressourcen.", "Soziale und ökologische Verantwortung.", "Kurzfristige Gewinne.", "Verzicht auf Zukunftsperspektive."],
+        "frage": "Was ist ein Merkmal von nachhaltigem Wirtschaftswachstum?",
+        "antworten": ["Ressourcenverschwendung", "Soziale und ökologische Verantwortung", "Konsummaximierung", "Verzicht auf Zukunftsperspektive"],
         "richtig": 1,
-        "erklärung": "Nachhaltigkeit bezieht zukünftige Generationen mit ein."
+        "erklärung": "Nachhaltiges Wachstum bezieht auch zukünftige Generationen mit ein."
     },
-
-    # Konjunktur
     ("Konjunktur", 20): {
         "frage": "Welche Phase gehört NICHT zum Konjunkturzyklus?",
         "antworten": ["Aufschwung", "Boom", "Deflation", "Rezession"],
         "richtig": 2,
-        "erklärung": "Deflation beschreibt Preisverfall, keine Konjunkturphase."
+        "erklärung": "Deflation ist ein Preisphänomen, kein Konjunkturstadium."
     },
     ("Konjunktur", 40): {
-        "frage": "Was geschieht in der Boom-Phase?",
-        "antworten": ["Hohe Arbeitslosigkeit", "Sinkende Nachfrage", "Überhitzung und steigende Preise", "Rückgang der Investitionen"],
+        "frage": "Was passiert typischerweise in der Boom-Phase?",
+        "antworten": ["Hohe Arbeitslosigkeit", "Sinkende Nachfrage", "Überhitzung & Preissteigerungen", "Investitionsrückgang"],
         "richtig": 2,
-        "erklärung": "Die Wirtschaft läuft auf Hochtouren, Nachfrage und Preise steigen."
+        "erklärung": "Im Boom steigen Nachfrage und Preise bei voller Kapazitätsauslastung."
     },
     ("Konjunktur", 60): {
-        "frage": "Was hilft gegen eine Rezession?",
-        "antworten": ["Steuererhöhung", "Ausgabensenkung", "Investitionen in Infrastruktur", "Zinserhöhung"],
+        "frage": "Welche Maßnahme hilft gegen Rezession?",
+        "antworten": ["Steuern erhöhen", "Ausgaben senken", "In Infrastruktur investieren", "Zinsen erhöhen"],
         "richtig": 2,
-        "erklärung": "Öffentliche Investitionen kurbeln Nachfrage und Beschäftigung an."
+        "erklärung": "Investitionen erhöhen Nachfrage und schaffen Arbeitsplätze."
     },
     ("Konjunktur", 80): {
         "frage": "Was bedeutet antizyklische Fiskalpolitik?",
-        "antworten": ["Zölle einführen", "Steuern in Rezession erhöhen", "Ausgaben entgegen Konjunkturentwicklung steuern", "Konsum senken"],
+        "antworten": ["Zölle einführen", "Steuern in Rezession erhöhen", "Staatsausgaben gegen Konjunkturverlauf steuern", "Konsum reduzieren"],
         "richtig": 2,
         "erklärung": "Ausgaben werden antizyklisch angepasst, um Konjunktur zu stabilisieren."
     },
-
-    # Europäische Wirtschaftsunion
     ("Europäische Wirtschaftsunion", 20): {
-        "frage": "Was ist Ziel der Europäischen Wirtschafts- und Währungsunion?",
-        "antworten": ["Zölle einführen", "Freier Handel und gemeinsame Währung", "Wettbewerb abschaffen", "Zentraler Wirtschaftsplan"],
+        "frage": "Was ist das Ziel der EWWU?",
+        "antworten": ["Zölle einführen", "Freier Handel & gemeinsame Währung", "Wettbewerb abschaffen", "Zentralplan für Europa"],
         "richtig": 1,
-        "erklärung": "Sie erleichtert Handel und stärkt Integration durch den Euro."
+        "erklärung": "Die EWWU erleichtert Handel und stärkt Integration durch den Euro."
     },
     ("Europäische Wirtschaftsunion", 40): {
         "frage": "Welche Institution steuert die Geldpolitik der EU?",
@@ -121,39 +112,48 @@ fragen = {
         "erklärung": "Die EZB ist zuständig für Preisstabilität und Geldpolitik."
     },
     ("Europäische Wirtschaftsunion", 60): {
-        "frage": "Welche Voraussetzung gilt für Euro-Beitritt?",
-        "antworten": ["NATO-Mitgliedschaft", "Hohe Exporte", "Stabiles Preisniveau und geringe Verschuldung", "Bevölkerung über 10 Mio."],
+        "frage": "Welche Voraussetzung gilt für den Euro-Beitritt?",
+        "antworten": ["NATO-Mitglied", "Exportüberschuss", "Stabiles Preisniveau und geringe Staatsverschuldung", "Bevölkerung über 10 Mio."],
         "richtig": 2,
-        "erklärung": "Die Konvergenzkriterien sichern finanzielle Stabilität im Euro-Raum."
+        "erklärung": "Die Konvergenzkriterien sichern finanzielle Stabilität."
     },
     ("Europäische Wirtschaftsunion", 80): {
-        "frage": "Was ist ein Vorteil der gemeinsamen Währung?",
-        "antworten": ["Mehr Wechselkursrisiken", "Erleichterung des Handels", "Nationale Geldpolitik", "Geringere Integration"],
+        "frage": "Was ist ein Vorteil des Euro?",
+        "antworten": ["Mehr Wechselkursrisiken", "Erleichterung des Handels", "Nationale Geldpolitik", "Weniger Integration"],
         "richtig": 1,
-        "erklärung": "Der Euro ermöglicht reibungslosen Handel ohne Wechselkursrisiken."
+        "erklärung": "Der Euro ermöglicht reibungslosen Handel ohne Wechselkurskosten."
     },
 }
 
-# --- Frageauswahl-Layout ---
-spalten = st.columns([2, 2, 2, 2])
-kategorien = ["Soziale Marktwirtschaft", "Wirtschaftswachstum", "Konjunktur", "Europäische Wirtschaftsunion"]
+# --- Spaltenlayout mit Fragenbuttons ---
 punkte_liste = [20, 40, 60, 80]
+kategorien = ["Soziale Marktwirtschaft", "Wirtschaftswachstum", "Konjunktur", "Europäische Wirtschaftsunion"]
+spalten = st.columns([2, 2, 2, 2])
 
 for i, kategorie in enumerate(kategorien):
     with spalten[i]:
-        st.markdown(f"<div style='font-size:16px;height:40px'><b>{kategorie}</b></div>", unsafe_allow_html=True)
-        for p in punkte_liste:
-            frage_id = f"{kategorie}_{p}"
+        st.markdown(f"<div style='font-size:16px;height:40px'><b>{kategorie}</b></div><br>", unsafe_allow_html=True)
+
+        for punkte in punkte_liste:
+            frage_id = f"{kategorie}_{punkte}"
             status = st.session_state["beantwortet"].get(frage_id)
-            label = f"{p} Punkte"
+            gruppe = st.session_state["antwortende_gruppen"].get(frage_id)
+            label = f"{punkte} Punkte"
+            icon = ""
+            group_label = ""
 
             if status == "richtig":
-                st.button(f"~~{label}~~ ✔️", key=frage_id, disabled=True)
+                icon = "✔️"
+                group_label = f"(Gruppe {gruppe})"
             elif status == "falsch":
-                st.button(f"~~{label}~~ ❌", key=frage_id, disabled=True)
+                icon = "❌"
+                group_label = f"(Gruppe {gruppe})"
+
+            if status in ["richtig", "falsch"]:
+                st.button(f"~~{label}~~ {icon} {group_label}", key=frage_id, disabled=True)
             else:
                 if st.button(label, key=frage_id):
-                    st.session_state["ausgewählte_frage"] = (kategorie, p)
+                    st.session_state["ausgewählte_frage"] = (kategorie, punkte)
 
 # --- Frageanzeige & Auswertung ---
 if st.session_state["ausgewählte_frage"]:
@@ -163,7 +163,6 @@ if st.session_state["ausgewählte_frage"]:
     if frage_daten:
         st.markdown("---")
         st.subheader(f"📝 Frage aus {kategorie} – {punkte} Punkte")
-
         auswahl = st.radio(frage_daten["frage"], frage_daten["antworten"], key=f"radio_{kategorie}_{punkte}")
         col1, col2 = st.columns([1, 1])
 
@@ -173,9 +172,8 @@ if st.session_state["ausgewählte_frage"]:
                 frage_id = f"{kategorie}_{punkte}"
                 gruppe = st.session_state["aktive_gruppe"]
 
-                # ✅ Antwortbewertung
                 if index == frage_daten["richtig"]:
-                    st.success("Richtig!")
+                    st.success("Richtig! 🎉")
                     st.session_state["beantwortet"][frage_id] = "richtig"
                     if gruppe == "A":
                         st.session_state["punkte_A"] += punkte
@@ -184,6 +182,8 @@ if st.session_state["ausgewählte_frage"]:
                 else:
                     st.error("Leider falsch.")
                     st.session_state["beantwortet"][frage_id] = "falsch"
+
+                st.session_state["antwortende_gruppen"][frage_id] = gruppe
 
                 # 📚 Erklärung anzeigen
                 richtige_antwort = frage_daten["antworten"][frage_daten["richtig"]]
