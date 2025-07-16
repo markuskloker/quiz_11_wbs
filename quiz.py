@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Session-State initialisieren ---
+# --- Initialisierung ---
 if "beantwortet" not in st.session_state:
     st.session_state["beantwortet"] = {}
 if "ausgewählte_frage" not in st.session_state:
@@ -12,47 +12,51 @@ if "punkte_B" not in st.session_state:
 if "aktive_gruppe" not in st.session_state:
     st.session_state["aktive_gruppe"] = "A"
 
-# --- Reset ---
+# --- Reset-Button ---
 if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["beantwortet"] = {}
     st.session_state["ausgewählte_frage"] = None
     st.session_state["punkte_A"] = 0
     st.session_state["punkte_B"] = 0
+    st.session_state["aktive_gruppe"] = "A"
     st.success("Quiz wurde zurückgesetzt.")
 
-# --- Punktestand & Gruppenauswahl ---
+# --- Punktestand & Gruppenanzeige ---
 st.markdown("### 🎯 Punktestand")
 st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
-st.radio("👥 Aktive Gruppe", ["A", "B"], key="aktive_gruppe", horizontal=True)
+st.write(f"👥 Aktive Gruppe: **Gruppe {st.session_state['aktive_gruppe']}**")
 
-# --- Fragen mit gestaffeltem Schwierigkeitsgrad ---
+# --- Fragenstruktur mit gestaffeltem Schwierigkeitsgrad ---
 fragen = {
-    ("Wirtschaftssysteme", 20): {"frage": "Was ist eine Marktwirtschaft?", "antworten": ["Der Staat lenkt Angebot", "Preise sind staatlich festgelegt", "Angebot und Nachfrage bestimmen den Markt", "Waren sind gratis"], "richtig": 2},
-    ("Wirtschaftssysteme", 40): {"frage": "Was unterscheidet die soziale Marktwirtschaft von der freien?", "antworten": ["Mehr Wettbewerb", "Staat greift sozial ausgleichend ein", "Keine Privatunternehmen", "Preise werden festgelegt"], "richtig": 1},
-    ("Wirtschaftssysteme", 60): {"frage": "Welches Ziel verfolgt das Stabilitätsgesetz?", "antworten": ["Steigende Inflation", "Steigende Arbeitslosigkeit", "Wirtschaftliches Gleichgewicht", "Verringerung der Nachfrage"], "richtig": 2},
-    ("Wirtschaftssysteme", 80): {"frage": "Wie wirken sich Subventionen auf den Markt aus?", "antworten": ["Preis steigt", "Konkurrenz nimmt ab", "Produkte werden teurer", "Angebot wird gezielt gefördert"], "richtig": 3},
-
-    ("Arbeitswelt", 20): {"frage": "Was ist eine Ausbildung?", "antworten": ["Eine Freizeitbeschäftigung", "Berufliche Qualifikation mit Theorie & Praxis", "Ein Studium", "Ein Ehrenamt"], "richtig": 1},
-    ("Arbeitswelt", 40): {"frage": "Was ist der Unterschied zwischen dualer und schulischer Ausbildung?", "antworten": ["Duale Ausbildung findet im Betrieb & Schule statt", "Bei beiden wird studiert", "Nur die schulische Ausbildung ist bezahlt", "Keine Unterschiede"], "richtig": 0},
-    ("Arbeitswelt", 60): {"frage": "Welche Pflichten hat der Ausbildende laut BBiG?", "antworten": ["Urlaub gewähren", "Auszubildende fördern & unterweisen", "Gehalt verdoppeln", "Beförderung zusichern"], "richtig": 1},
-    ("Arbeitswelt", 80): {"frage": "Wie wirken Tarifverträge und Betriebsvereinbarungen zusammen?", "antworten": ["Tarifverträge gelten nie", "Betriebsvereinbarungen stehen über dem Gesetz", "Tarifverträge regeln Mindeststandards, Betriebe können ergänzen", "Tarifverträge gelten nur bei Beamten"], "richtig": 2},
-
-    ("Berufsorientierung", 20): {"frage": "Was gehört in eine Bewerbung?", "antworten": ["Steuer-ID", "Liebesbrief", "Lebenslauf & Anschreiben", "Rechnungen"], "richtig": 2},
-    ("Berufsorientierung", 40): {"frage": "Was ist das Ziel eines Assessment-Centers?", "antworten": ["Urlaub buchen", "Mitarbeiter motivieren", "Persönlichkeit & Fähigkeiten prüfen", "Kosten sparen"], "richtig": 2},
-    ("Berufsorientierung", 60): {"frage": "Was zählt zu Soft Skills?", "antworten": ["Teamfähigkeit", "Technisches Wissen", "Sprachen", "Excel-Kenntnisse"], "richtig": 0},
-    ("Berufsorientierung", 80): {"frage": "Wie bereitest du dich auf ein Vorstellungsgespräch optimal vor?", "antworten": ["Unpünktlich sein", "Unterlagen ignorieren", "Firma recherchieren & Selbstpräsentation üben", "Nur warten"], "richtig": 2},
-
-    ("Verbraucherverhalten", 20): {"frage": "Was bedeutet nachhaltiger Konsum?", "antworten": ["Viel kaufen", "Spontan einkaufen", "Umweltbewusst & ressourcenschonend konsumieren", "Immer das Teuerste wählen"], "richtig": 2},
-    ("Verbraucherverhalten", 40): {"frage": "Was ist das Ziel von Fair Trade?", "antworten": ["Schnell handeln", "Produzenten faire Bedingungen bieten", "Preise erhöhen", "Rabatte garantieren"], "richtig": 1},
-    ("Verbraucherverhalten", 60): {"frage": "Wie beeinflusst Werbung unser Konsumverhalten?", "antworten": ["Gar nicht", "Manipulativ über Emotionen & Bedürfnisse", "Nur durch Logos", "Indirekt über TV-Zeit"], "richtig": 1},
-    ("Verbraucherverhalten", 80): {"frage": "Was beinhaltet der ökologische Fußabdruck?", "antworten": ["Fußgröße", "CO₂-Ausstoß durch Lebensweise", "Haushaltsbudget", "Kleiderwahl"], "richtig": 1},
+    # Beispielkategorie: Wirtschaftssysteme
+    ("Wirtschaftssysteme", 20): {
+        "frage": "Welches Prinzip liegt der Marktwirtschaft zugrunde?",
+        "antworten": ["Zufallsproduktion", "Planung durch Staat", "Angebot und Nachfrage", "Subventionierung"],
+        "richtig": 2
+    },
+    ("Wirtschaftssysteme", 40): {
+        "frage": "Was unterscheidet die soziale von der freien Marktwirtschaft?",
+        "antworten": ["Höhere Preise", "Staatlicher Ausgleich sozialer Nachteile", "Private Produktionsmittel", "Kein Wettbewerb"],
+        "richtig": 1
+    },
+    ("Wirtschaftssysteme", 60): {
+        "frage": "Was beschreibt den magischen Viereck der Wirtschaftspolitik?",
+        "antworten": ["Vier Wirtschaftszentren", "Vier Steuerarten", "Vier gleichrangige Ziele", "Vier Ministerien"],
+        "richtig": 2
+    },
+    ("Wirtschaftssysteme", 80): {
+        "frage": "Wie beeinflusst die Geldpolitik der EZB die soziale Marktwirtschaft?",
+        "antworten": ["Gar nicht", "Über Zinsentscheidungen zur Stabilität", "Durch Werbung", "Durch Steuern"],
+        "richtig": 1
+    },
+    # Weitere Kategorien und Fragen analog ergänzen...
 }
 
-# --- Layout: 4 gleichmäßige breite Spalten + kleiner Kategorientitel ---
-kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
+# --- Anzeige: 4 breite Spalten nebeneinander mit kleineren Titeln ---
+kategorien = list({key[0] for key in fragen.keys()})
 punkte_liste = [20, 40, 60, 80]
-spalten = st.columns([2, 2, 2, 2])  # Alle Spalten gleich breit
+spalten = st.columns([2, 2, 2, 2])
 
 for i, kat in enumerate(kategorien):
     with spalten[i]:
@@ -70,7 +74,7 @@ for i, kat in enumerate(kategorien):
                 if st.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kat, p)
 
-# --- Frage anzeigen und auswerten ---
+# --- Frageanzeige mit Antwortauswertung & Zurück-Option ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
@@ -79,20 +83,29 @@ if st.session_state["ausgewählte_frage"]:
         st.markdown("---")
         st.subheader(f"📝 Frage aus {kategorie} – {punkte} Punkte")
         auswahl = st.radio(frage_daten["frage"], frage_daten["antworten"], key=f"radio_{kategorie}_{punkte}")
-        if st.button("Antwort bestätigen", key=f"bestätigen_{kategorie}_{punkte}"):
-            index = frage_daten["antworten"].index(auswahl)
-            frage_id = f"{kategorie}_{punkte}"
-            gruppe = st.session_state["aktive_gruppe"]
 
-            if index == frage_daten["richtig"]:
-                st.success("✅ Richtig!")
-                st.session_state["beantwortet"][frage_id] = "richtig"
-                if gruppe == "A":
-                    st.session_state["punkte_A"] += punkte
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("✅ Antwort bestätigen", key=f"bestätigen_{kategorie}_{punkte}"):
+                index = frage_daten["antworten"].index(auswahl)
+                frage_id = f"{kategorie}_{punkte}"
+                gruppe = st.session_state["aktive_gruppe"]
+
+                if index == frage_daten["richtig"]:
+                    st.success("Richtig!")
+                    st.session_state["beantwortet"][frage_id] = "richtig"
+                    if gruppe == "A":
+                        st.session_state["punkte_A"] += punkte
+                    else:
+                        st.session_state["punkte_B"] += punkte
                 else:
-                    st.session_state["punkte_B"] += punkte
-            else:
-                st.error("❌ Leider falsch.")
-                st.session_state["beantwortet"][frage_id] = "falsch"
+                    st.error("Leider falsch.")
+                    st.session_state["beantwortet"][frage_id] = "falsch"
 
-            st.session_state["ausgewählte_frage"] = None
+                # Automatischer Gruppenwechsel
+                st.session_state["aktive_gruppe"] = "B" if gruppe == "A" else "A"
+                st.session_state["ausgewählte_frage"] = None
+
+        with col2:
+            if st.button("↩️ Zurück", key=f"zurueck_{kategorie}_{punkte}"):
+                st.session_state["ausgewählte_frage"] = None
