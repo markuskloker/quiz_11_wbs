@@ -14,7 +14,7 @@ if "aktive_gruppe" not in st.session_state:
 if "antwortende_gruppen" not in st.session_state:
     st.session_state["antwortende_gruppen"] = {}
 
-# --- Reset-Button ---
+# --- Reset ---
 if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["beantwortet"] = {}
     st.session_state["ausgewählte_frage"] = None
@@ -22,7 +22,6 @@ if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["punkte_B"] = 0
     st.session_state["aktive_gruppe"] = "A"
     st.session_state["antwortende_gruppen"] = {}
-    st.success("Quiz wurde erfolgreich zurückgesetzt.")
 
 # --- Punktestand ---
 st.markdown("### 🎯 Punktestand")
@@ -30,108 +29,107 @@ st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
 st.write(f"👥 Aktive Gruppe: **Gruppe {st.session_state['aktive_gruppe']}**")
 
-# --- Fragenstruktur: 4 Kategorien × 4 Fragen mit Erklärung ---
+# --- Fragen mit ausführlichen Erklärungen ---
 fragen = {
-    # (Kategorie, Punkte): {...}
     ("Soziale Marktwirtschaft", 20): {
         "frage": "Welche Rolle spielt der Staat in der sozialen Marktwirtschaft?",
         "antworten": ["Er greift nicht ein.", "Er plant zentral.", "Er sorgt für Ausgleich und reguliert Wettbewerb.", "Er kontrolliert alle Unternehmen."],
         "richtig": 2,
-        "erklärung": "Der Staat schafft sozialen Ausgleich und schützt den Wettbewerb."
+        "erklärung": "Der Staat sichert sozialen Ausgleich durch Maßnahmen wie Sozialversicherung und Mindestlohn. Gleichzeitig schützt er den Wettbewerb vor Monopolen. Er greift gezielt ein, ohne die Grundprinzipien der Marktwirtschaft aufzugeben."
     },
     ("Soziale Marktwirtschaft", 40): {
         "frage": "Was versteht man unter 'Ordnungspolitik'?",
         "antworten": ["Preisbindung", "Staatliche Rahmengestaltung", "Produktionssteuerung", "Wettbewerbsabschaffung"],
         "richtig": 1,
-        "erklärung": "Sie legt die rechtlichen Rahmenbedingungen für den Markt fest."
+        "erklärung": "Ordnungspolitik bezeichnet die staatliche Festlegung von Regeln, die die Wirtschaft strukturieren. Sie sorgt für Wettbewerbsschutz, Vertragssicherheit und Konsumentenschutz, ohne direkt ins Marktgeschehen einzugreifen."
     },
     ("Soziale Marktwirtschaft", 60): {
         "frage": "Welche Maßnahme gehört NICHT zur sozialen Marktwirtschaft?",
         "antworten": ["Subventionen", "Mindestlöhne", "Zentrale Planung", "Sozialversicherungen"],
         "richtig": 2,
-        "erklärung": "Zentrale Planung ist ein Merkmal der Planwirtschaft."
+        "erklärung": "Zentrale Planung bedeutet, dass der Staat vorgibt, was produziert wird — das ist typisch für Planwirtschaft. In der sozialen Marktwirtschaft agieren Unternehmen weitgehend frei, gesteuert durch Marktmechanismen."
     },
     ("Soziale Marktwirtschaft", 80): {
         "frage": "Was ist ein Ziel der sozialen Marktwirtschaft?",
         "antworten": ["Wettbewerb abschaffen", "Monopole fördern", "Freiheit und soziale Sicherheit verbinden", "Planwirtschaft einführen"],
         "richtig": 2,
-        "erklärung": "Sie verbindet wirtschaftliche Freiheit mit sozialem Ausgleich."
+        "erklärung": "Die soziale Marktwirtschaft verbindet ökonomische Effizienz mit sozialer Gerechtigkeit. Sie will Wohlstand schaffen, dabei aber auch soziale Ungleichheit abmildern."
     },
     ("Wirtschaftswachstum", 20): {
         "frage": "Welche Kennzahl misst das Wirtschaftswachstum?",
         "antworten": ["Inflation", "BIP", "Arbeitslosenquote", "Außenhandel"],
         "richtig": 1,
-        "erklärung": "Das BIP zeigt die Wirtschaftsleistung eines Landes."
+        "erklärung": "Das Bruttoinlandsprodukt (BIP) beschreibt den Gesamtwert aller in einem Jahr produzierten Waren und Dienstleistungen. Ein steigendes BIP gilt als Indikator für wirtschaftliches Wachstum."
     },
     ("Wirtschaftswachstum", 40): {
         "frage": "Was ist qualitatives Wachstum?",
         "antworten": ["Produktionssteigerung", "Nachhaltiges Wachstum", "Subventioniertes Wachstum", "Industriewachstum"],
         "richtig": 1,
-        "erklärung": "Es setzt auf Nachhaltigkeit und Ressourcenschonung."
+        "erklärung": "Qualitatives Wachstum bedeutet, dass nicht nur mehr produziert wird, sondern auch nachhaltiger. Es berücksichtigt Umweltschutz, soziale Standards und langfristige Stabilität."
     },
     ("Wirtschaftswachstum", 60): {
         "frage": "Was beschreibt ein Problem des Wirtschaftswachstums?",
         "antworten": ["Mehr Arbeitslosigkeit", "Umweltzerstörung und Ressourcenverbrauch", "Branchenübergreifende Gleichverteilung", "Innovationsverlust"],
         "richtig": 1,
-        "erklärung": "Wachstum kann die Umwelt und Ressourcen stark belasten."
+        "erklärung": "Wachstum kann zu Umweltbelastungen führen, da Ressourcen ausgebeutet und Emissionen erhöht werden. Ohne Rücksicht auf Nachhaltigkeit gefährdet es künftige Generationen."
     },
     ("Wirtschaftswachstum", 80): {
         "frage": "Was ist ein Merkmal von nachhaltigem Wirtschaftswachstum?",
         "antworten": ["Ressourcenverschwendung", "Soziale und ökologische Verantwortung", "Konsummaximierung", "Verzicht auf Zukunftsperspektive"],
         "richtig": 1,
-        "erklärung": "Es berücksichtigt auch die Bedürfnisse zukünftiger Generationen."
+        "erklärung": "Nachhaltiges Wachstum achtet auf die Begrenztheit natürlicher Ressourcen und die sozialen Auswirkungen wirtschaftlichen Handelns. Es fördert Lebensqualität statt bloße Mengenproduktion."
     },
     ("Konjunktur", 20): {
         "frage": "Welche Phase gehört NICHT zum Konjunkturzyklus?",
         "antworten": ["Aufschwung", "Boom", "Deflation", "Rezession"],
         "richtig": 2,
-        "erklärung": "Deflation ist ein Preisphänomen, keine Konjunkturphase."
+        "erklärung": "Deflation beschreibt Preisverfall, ist jedoch keine Konjunkturphase. Ein Konjunkturzyklus umfasst Aufschwung, Boom, Abschwung und Rezession."
     },
     ("Konjunktur", 40): {
         "frage": "Was passiert in der Boom-Phase?",
         "antworten": ["Hohe Arbeitslosigkeit", "Sinkende Nachfrage", "Überhitzung & Preissteigerungen", "Investitionsrückgang"],
         "richtig": 2,
-        "erklärung": "Vollauslastung der Ressourcen führt zu Preisanstieg."
+        "erklärung": "In der Boom-Phase ist die Wirtschaft stark ausgelastet. Nachfrage und Produktion steigen — oft schneller als nachhaltig möglich, was zu Preissteigerungen führt."
     },
     ("Konjunktur", 60): {
         "frage": "Maßnahme gegen Rezession?",
         "antworten": ["Steuern erhöhen", "Ausgaben senken", "In Infrastruktur investieren", "Zinsen erhöhen"],
         "richtig": 2,
-        "erklärung": "Investitionen kurbeln Nachfrage und Beschäftigung an."
+        "erklärung": "Der Staat kann durch öffentliche Investitionen Arbeitsplätze schaffen und die Nachfrage stärken. Das hilft, die Wirtschaft aus der Rezession zu holen."
     },
     ("Konjunktur", 80): {
         "frage": "Was bedeutet antizyklische Fiskalpolitik?",
         "antworten": ["Zölle einführen", "Steuern in Rezession erhöhen", "Staatsausgaben gegen Konjunkturverlauf steuern", "Konsum reduzieren"],
         "richtig": 2,
-        "erklärung": "Der Staat gleicht konjunkturelle Schwankungen aktiv aus."
+        "erklärung": "Antizyklische Fiskalpolitik bedeutet: In Rezessionen steigen Staatsausgaben, in Booms sinken sie. So gleicht der Staat konjunkturelle Schwankungen aus."
     },
     ("Europäische Wirtschaftsunion", 20): {
         "frage": "Was ist das Ziel der EWWU?",
         "antworten": ["Zölle einführen", "Freier Handel & gemeinsame Währung", "Wettbewerb abschaffen", "Zentralplan für Europa"],
         "richtig": 1,
-        "erklärung": "Sie erleichtert Handel und stärkt Integration durch den Euro."
+        "erklärung": "Die EWWU fördert wirtschaftliche Integration durch freien Handel und den Euro. Dadurch sollen Stabilität und Wohlstand in Europa steigen."
     },
     ("Europäische Wirtschaftsunion", 40): {
         "frage": "Welche Institution steuert die Geldpolitik der EU?",
         "antworten": ["EU-Kommission", "EuGH", "EZB", "Europäischer Rat"],
         "richtig": 2,
-        "erklärung": "Die EZB sorgt für Preisstabilität und geldpolitische Steuerung."
+        "erklärung": "Die Europäische Zentralbank (EZB) ist für die Geldpolitik verantwortlich. Sie steuert den Leitzins und kontrolliert die Geldmenge, um Preisstabilität im Euroraum zu gewährleisten."
     },
     ("Europäische Wirtschaftsunion", 60): {
-        "frage": "Voraussetzung für Euro-Beitritt?",
-        "antworten": ["NATO-Mitglied", "Exportüberschuss", "Stabiles Preisniveau und geringe Staatsverschuldung", "Bevölkerung über 10 Mio."],
+        "frage": "Welche Voraussetzung gilt für den Euro-Beitritt?",
+        "antworten": ["NATO-Mitgliedschaft", "Exportüberschuss", "Stabiles Preisniveau und geringe Staatsverschuldung", "Bevölkerung über 10 Mio."],
         "richtig": 2,
-        "erklärung": "Konvergenzkriterien sichern wirtschaftliche Stabilität im Euroraum."
+        "erklärung": "Staaten müssen die sogenannten Konvergenzkriterien erfüllen: Inflation, Staatsverschuldung und Haushaltsdefizit müssen innerhalb bestimmter Grenzen liegen. Ziel ist ein stabiler und verlässlicher Euro-Raum."
     },
     ("Europäische Wirtschaftsunion", 80): {
         "frage": "Was ist ein Vorteil des Euro?",
         "antworten": ["Mehr Wechselkursrisiken", "Erleichterung des Handels", "Nationale Geldpolitik", "Weniger Integration"],
         "richtig": 1,
-        "erklärung": "Der Euro schafft stabile Handelsbeziehungen und Preisvergleichbarkeit."
+        "erklärung": "Eine gemeinsame Währung macht grenzüberschreitenden Handel einfacher, da keine Währungsumrechnung nötig ist. Das stärkt den Binnenmarkt und spart Kosten im internationalen Geschäft."
     },
 }
 
-# --- Layout: 4 Spalten mit stabilen Buttonpositionen ---
+# --- Frage-Button-Anzeige mit fixierter Struktur ---
 punkte_liste = [20, 40, 60, 80]
 kategorien = ["Soziale Marktwirtschaft", "Wirtschaftswachstum", "Konjunktur", "Europäische Wirtschaftsunion"]
 spalten = st.columns([2, 2, 2, 2])
@@ -156,19 +154,18 @@ for i, kategorie in enumerate(kategorien):
                 group_label = f"(Gruppe {gruppe})"
 
             button_text = f"{label} {icon} {group_label}".strip()
+            container = st.empty()
 
-            # Fixierte Anzeige mit fester Größe – egal ob beantwortet oder nicht
-            button_placeholder = st.empty()
             if status:
-                with button_placeholder.container():
-                    st.markdown(
-                        f"<div style='height:50px; display:flex; align-items:center; justify-content:center; border:1px solid #ccc; border-radius:4px; font-size:14px;'>{button_text}</div>",
-                        unsafe_allow_html=True)
+                container.markdown(
+                    f"<div style='height:48px; border:1px solid #ccc; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; background-color:#f9f9f9'>{button_text}</div>",
+                    unsafe_allow_html=True
+                )
             else:
-                if button_placeholder.button(label, key=frage_id):
+                if container.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kategorie, punkte)
 
-# --- Frageanzeige ---
+# --- Frageanzeige & Auswertung ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
@@ -186,14 +183,14 @@ if st.session_state["ausgewählte_frage"]:
                 gruppe = st.session_state["aktive_gruppe"]
 
                 if index == frage_daten["richtig"]:
-                    st.success("Richtig! 🎉")
+                    st.success("✅ Richtig!")
                     st.session_state["beantwortet"][frage_id] = "richtig"
                     if gruppe == "A":
                         st.session_state["punkte_A"] += punkte
                     else:
                         st.session_state["punkte_B"] += punkte
                 else:
-                    st.error("Leider falsch.")
+                    st.error("❌ Leider falsch.")
                     st.session_state["beantwortet"][frage_id] = "falsch"
 
                 st.session_state["antwortende_gruppen"][frage_id] = gruppe
@@ -201,7 +198,7 @@ if st.session_state["ausgewählte_frage"]:
                 # 📚 Erklärung anzeigen
                 richtige_antwort = frage_daten["antworten"][frage_daten["richtig"]]
                 erklärung = frage_daten.get("erklärung", "")
-                st.info(f"👉 Richtige Antwort: **{richtige_antwort}**\n\n📚 **Warum?** {erklärung}")
+                st.info(f"👉 Richtige Antwort: **{richtige_antwort}**\n\n📚 **Erklärung:** {erklärung}")
 
                 # 🔁 Gruppenwechsel
                 st.session_state["aktive_gruppe"] = "B" if gruppe == "A" else "A"
