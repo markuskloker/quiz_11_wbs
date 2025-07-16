@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Initialisierung ---
+# --- Session-State ---
 if "beantwortet" not in st.session_state:
     st.session_state["beantwortet"] = {}
 if "ausgewählte_frage" not in st.session_state:
@@ -21,40 +21,100 @@ if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["aktive_gruppe"] = "A"
     st.success("Quiz wurde zurückgesetzt.")
 
-# --- Punktestand ---
+# --- Punktestand & aktive Gruppe ---
 st.markdown("### 🎯 Punktestand")
 st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
 st.write(f"👥 Aktive Gruppe: **Gruppe {st.session_state['aktive_gruppe']}**")
 
-# --- Fragenstruktur: 4 Kategorien × 4 Fragen (je 4 Antworten) ---
+# --- Fragenstruktur (4 Kategorien × 4 Fragen mit je 4 Antwortmöglichkeiten) ---
 fragen = {
-    # Wirtschaftssysteme
-    ("Wirtschaftssysteme", 20): {"frage": "Was kennzeichnet eine freie Marktwirtschaft?", "antworten": ["Staatliche Kontrolle", "Angebot & Nachfrage regeln den Markt", "Zentrale Planung", "Preisbindung durch Regierung"], "richtig": 1},
-    ("Wirtschaftssysteme", 40): {"frage": "Was unterscheidet die soziale von der freien Marktwirtschaft?", "antworten": ["Mehr Wettbewerb", "Sozialer Ausgleich durch Staat", "Privatbesitz wird verboten", "Preise sind festgelegt"], "richtig": 1},
-    ("Wirtschaftssysteme", 60): {"frage": "Welche Ziele enthält das Stabilitätsgesetz?", "antworten": ["Hohe Inflation", "Vollbeschäftigung", "Preisanstieg", "Exportsteigerung"], "richtig": 1},
-    ("Wirtschaftssysteme", 80): {"frage": "Wie wirken sich staatliche Subventionen auf die Marktregulierung aus?", "antworten": ["Konsum wird eingeschränkt", "Markt wird destabilisiert", "Bestimmte Branchen werden gefördert", "Nachfrage sinkt stark"], "richtig": 2},
+    ("Wirtschaftssysteme", 20): {
+        "frage": "Was beschreibt das Prinzip der freien Marktwirtschaft?",
+        "antworten": ["Der Staat legt Preise fest", "Angebot & Nachfrage regeln Preise", "Waren sind kostenlos", "Monopole kontrollieren Märkte"],
+        "richtig": 1
+    },
+    ("Wirtschaftssysteme", 40): {
+        "frage": "Was kennzeichnet die soziale Marktwirtschaft?",
+        "antworten": ["Staat greift sozial ausgleichend ein", "Preise sind fixiert", "Es existieren keine Unternehmen", "Planung durch Behörden"],
+        "richtig": 0
+    },
+    ("Wirtschaftssysteme", 60): {
+        "frage": "Was ist Ziel des magischen Vierecks?",
+        "antworten": ["Vier Ministerien kontrollieren Steuern", "Gleichzeitige Verwirklichung wirtschaftlicher Hauptziele", "Inflation senken", "Vollbeschäftigung abschaffen"],
+        "richtig": 1
+    },
+    ("Wirtschaftssysteme", 80): {
+        "frage": "Wie beeinflussen Subventionen den Markt?",
+        "antworten": ["Erhöhung der Inflation", "Förderung gezielter Branchen", "Einschränkung der Produktion", "Abschaffung von Wettbewerb"],
+        "richtig": 1
+    },
 
-    # Arbeitswelt
-    ("Arbeitswelt", 20): {"frage": "Was versteht man unter dualer Ausbildung?", "antworten": ["Nur Berufsschule", "Nur Betrieb", "Kombination von Schule und Betrieb", "Selbststudium"], "richtig": 2},
-    ("Arbeitswelt", 40): {"frage": "Wer darf einen Ausbildungsvertrag abschließen?", "antworten": ["Nur über 21", "Nur mit Abi", "Jede Person mit Schulabschluss", "Nur mit Studium"], "richtig": 2},
-    ("Arbeitswelt", 60): {"frage": "Welche Aufgabe hat ein Ausbildungsnachweis (Berichtsheft)?", "antworten": ["Beurteilung durch Kunden", "Nachweis über erbrachte Urlaubszeiten", "Dokumentation der Lerninhalte", "Berechnung der Ausbildungsvergütung"], "richtig": 2},
-    ("Arbeitswelt", 80): {"frage": "Welche rechtliche Grundlage regelt Pflichten von Ausbildenden?", "antworten": ["Grundgesetz", "Arbeitsrecht", "Berufsbildungsgesetz (BBiG)", "Gewerbeordnung"], "richtig": 2},
+    ("Arbeitswelt", 20): {
+        "frage": "Was versteht man unter dualer Ausbildung?",
+        "antworten": ["Nur Betrieb", "Nur Schule", "Selbststudium", "Ausbildung im Betrieb & Berufsschule"],
+        "richtig": 3
+    },
+    ("Arbeitswelt", 40): {
+        "frage": "Was ist das Berichtsheft?",
+        "antworten": ["Rechnung", "Stundenplan", "Ausbildungsnachweis", "Gehaltserklärung"],
+        "richtig": 2
+    },
+    ("Arbeitswelt", 60): {
+        "frage": "Was ist im Berufsbildungsgesetz geregelt?",
+        "antworten": ["Pflichten des Ausbildenden", "Steuern", "Versicherungen", "Urlaubsrecht für alle Beschäftigten"],
+        "richtig": 0
+    },
+    ("Arbeitswelt", 80): {
+        "frage": "Was passiert bei Verstoß gegen Ausbildungsverpflichtungen?",
+        "antworten": ["Bußgeld & Entzug der Ausbildungsbefugnis", "Gehaltskürzung", "Bonuszahlung", "Nichts"],
+        "richtig": 0
+    },
 
-    # Berufsorientierung
-    ("Berufsorientierung", 20): {"frage": "Was gehört in ein Bewerbungsschreiben?", "antworten": ["Rechnung", "Selbstbeschreibung & Motivation", "Mietvertrag", "Abschlusszeugnis"], "richtig": 1},
-    ("Berufsorientierung", 40): {"frage": "Was ist ein Assessment-Center?", "antworten": ["Urlaubszentrum", "Auswahlverfahren mit Gruppenübungen", "Online-Bewerbung", "Bewerbungsgespräch per Telefon"], "richtig": 1},
-    ("Berufsorientierung", 60): {"frage": "Welche Eigenschaft zählt zu Soft Skills?", "antworten": ["Teamfähigkeit", "Programmierkenntnisse", "Führerschein", "Abschlussnote"], "richtig": 0},
-    ("Berufsorientierung", 80): {"frage": "Wie kann man im Vorstellungsgespräch mit eigenen Schwächen umgehen?", "antworten": ["Leugnen", "Reflektiert und lösungsorientiert benennen", "Ignorieren", "Übertreiben"], "richtig": 1},
+    ("Berufsorientierung", 20): {
+        "frage": "Was gehört zu einer vollständigen Bewerbung?",
+        "antworten": ["Liebesbrief", "Lebenslauf & Anschreiben", "Steuererklärung", "Abizeugnis ohne weitere Dokumente"],
+        "richtig": 1
+    },
+    ("Berufsorientierung", 40): {
+        "frage": "Was ist das Ziel eines Assessment-Centers?",
+        "antworten": ["Teamverhalten und Problemlösen beurteilen", "Bewerber in Gruppen unterhalten", "Firmenpräsentation zeigen", "Einkaufsverhalten analysieren"],
+        "richtig": 0
+    },
+    ("Berufsorientierung", 60): {
+        "frage": "Was zählt zu Soft Skills?",
+        "antworten": ["Excel-Kenntnisse", "Pünktlichkeit", "Teamfähigkeit", "Technisches Know-how"],
+        "richtig": 2
+    },
+    ("Berufsorientierung", 80): {
+        "frage": "Wie geht man im Vorstellungsgespräch mit Schwächen um?",
+        "antworten": ["Übertreiben", "Verheimlichen", "Reflektiert benennen & Umgang zeigen", "Lustig machen"],
+        "richtig": 2
+    },
 
-    # Verbraucherverhalten
-    ("Verbraucherverhalten", 20): {"frage": "Was bedeutet nachhaltiger Konsum?", "antworten": ["Billig einkaufen", "Ökologisch und sozial bewusst einkaufen", "Spontankäufe", "Viel kaufen"], "richtig": 1},
-    ("Verbraucherverhalten", 40): {"frage": "Was ist das Ziel von Fair Trade?", "antworten": ["Rabatte sichern", "Faire Arbeitsbedingungen für Produzenten", "Produkte schneller liefern", "Einkäufe bewerben"], "richtig": 1},
-    ("Verbraucherverhalten", 60): {"frage": "Wie beeinflusst Werbung unser Konsumverhalten?", "antworten": ["Gar nicht", "Sie informiert neutral", "Sie beeinflusst Entscheidungen emotional", "Sie unterbindet Kaufentscheidungen"], "richtig": 2},
-    ("Verbraucherverhalten", 80): {"frage": "Was beschreibt der ökologische Fußabdruck?", "antworten": ["Größe der Schuhe", "CO₂-Bilanz des eigenen Lebensstils", "Einkommen", "Verbrauch von Elektrogeräten"], "richtig": 1},
+    ("Verbraucherverhalten", 20): {
+        "frage": "Was bedeutet nachhaltiger Konsum?",
+        "antworten": ["Schnäppchenjagd", "Spontaneinkauf", "Bewusster, umweltfreundlicher Konsum", "Luxusgüter kaufen"],
+        "richtig": 2
+    },
+    ("Verbraucherverhalten", 40): {
+        "frage": "Was ist Fair Trade?",
+        "antworten": ["Handel unter Freunden", "Fairer Handel mit Produzenten weltweit", "Online-Shopping-Plattform", "Rabatt-Aktion"],
+        "richtig": 1
+    },
+    ("Verbraucherverhalten", 60): {
+        "frage": "Wie beeinflusst Werbung das Kaufverhalten?",
+        "antworten": ["Kaum", "Neutral", "Emotional & psychologisch", "Nur bei digitalen Produkten"],
+        "richtig": 2
+    },
+    ("Verbraucherverhalten", 80): {
+        "frage": "Was ist der ökologische Fußabdruck?",
+        "antworten": ["CO₂-Bilanz der Lebensweise", "Fußgröße", "Verbrauch von Schuhen", "Finanzverhalten"],
+        "richtig": 0
+    }
 }
 
-# --- Layout: 4 gleichmäßige Spalten ---
+# --- Layout mit 4 gleichmäßigen Spalten ---
 kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
 punkte_liste = [20, 40, 60, 80]
 spalten = st.columns([2, 2, 2, 2])
@@ -75,7 +135,7 @@ for i, kat in enumerate(kategorien):
                 if st.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kat, p)
 
-# --- Frageanzeige mit Antwortlogik & „Zurück“-Button ---
+# --- Frageanzeige mit Antwort- & Zurück-Button ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
@@ -93,19 +153,4 @@ if st.session_state["ausgewählte_frage"]:
                 gruppe = st.session_state["aktive_gruppe"]
 
                 if index == frage_daten["richtig"]:
-                    st.success("Richtig!")
-                    st.session_state["beantwortet"][frage_id] = "richtig"
-                    if gruppe == "A":
-                        st.session_state["punkte_A"] += punkte
-                    else:
-                        st.session_state["punkte_B"] += punkte
-                else:
-                    st.error("Leider falsch.")
-                    st.session_state["beantwortet"][frage_id] = "falsch"
-
-                # Gruppenwechsel
-                st.session_state["aktive_gruppe"] = "B" if gruppe == "A" else "A"
-                st.session_state["ausgewählte_frage"] = None
-
-        with col2:
-            if st.button("↩️
+                    st.success("Richtig
