@@ -54,7 +54,7 @@ fragen = {
 # --- Anzeige: vier nebeneinanderliegende breite Spalten ---
 kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
 punkte_liste = [20, 40, 60, 80]
-spalten = st.columns([3, 3, 3, 3])  # Breiter, aber alle sichtbar
+spalten = st.columns([5, 5, 5, 5])  # Breiter, aber alle sichtbar
 
 for i, kat in enumerate(kategorien):
     with spalten[i]:
