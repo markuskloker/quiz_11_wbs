@@ -1,63 +1,26 @@
 import streamlit as st
 
-# 📚 Quiz-Daten
+# Datenstruktur: Kategorien, Fragen, Antworten und Punkte
 quiz_data = {
-    "Wirtschaft": [
-        {"score": 20, "question": "Was versteht man unter dem Begriff 'Bruttoinlandsprodukt' (BIP)?", "options": [...], "answer": 0},
-        {"score": 40, "question": "Was ist der Unterschied zwischen Brutto- und Nettogehalt?", "options": [...], "answer": 2},
-        {"score": 60, "question": "Was bedeutet der Begriff 'Inflation'?", "options": [...], "answer": 1},
-        {"score": 80, "question": "Was ist der Zweck der Europäischen Zentralbank (EZB)?", "options": [...], "answer": 1}
+    "Wirtschaftssysteme": [
+        {"frage": "Was kennzeichnet die soziale Marktwirtschaft?", "antworten": ["Planwirtschaft", "Freie Marktwirtschaft", "Staatliche Eingriffe", "Subsistenzwirtschaft"], "richtig": 2, "punkte": 20},
+        {"frage": "Wer gilt als Begründer der sozialen Marktwirtschaft?", "antworten": ["Adam Smith", "Karl Marx", "Ludwig Erhard", "John Keynes"], "richtig": 2, "punkte": 40},
+        {"frage": "Was ist das Ziel des Stabilitätsgesetzes?", "antworten": ["Wirtschaftswachstum", "Preissteigerung", "Arbeitslosigkeit erhöhen", "Sozialabbau"], "richtig": 0, "punkte": 60},
+        {"frage": "Was bedeutet Angebot und Nachfrage?", "antworten": ["Steuermechanismus", "Importregelung", "Produktionskosten", "Konsumsteuer"], "richtig": 0, "punkte": 80}
     ],
-    "Recht": [
-        {"score": 20, "question": "Was versteht man unter dem Begriff 'Rechtsfähigkeit'?", "options": [...], "answer": 1},
-        {"score": 40, "question": "Was ist ein 'Kaufvertrag'?", "options": [...], "answer": 1},
-        {"score": 60, "question": "Was ist der Unterschied zwischen 'Eigentum' und 'Besitz'?", "options": [...], "answer": 0},
-        {"score": 80, "question": "Was ist eine 'juristische Person'?", "options": [...], "answer": 1}
+    "Arbeitswelt": [
+        {"frage": "Was versteht man unter dualer Ausbildung?", "antworten": ["Nur Schule", "Nur Betrieb", "Kombination Schule und Betrieb", "Selbststudium"], "richtig": 2, "punkte": 20},
+        {"frage": "Welche Rechte haben Auszubildende?", "antworten": ["Kündigungsschutz", "Mindestlohn", "Urlaubsanspruch", "Beförderung"], "richtig": 2, "punkte": 40},
+        {"frage": "Was ist eine Tarifverhandlung?", "antworten": ["Verhandlung über Preise", "Verhandlung über Gehälter", "Verhandlung mit Kunden", "Private Vereinbarung"], "richtig": 1, "punkte": 60},
+        {"frage": "Was bedeutet Work-Life-Balance?", "antworten": ["Mehr Arbeit", "Weniger Freizeit", "Ausgewogenes Verhältnis", "Nur Freizeit"], "richtig": 2, "punkte": 80}
     ],
-    "Globalisierung": [
-        {"score": 20, "question": "Was versteht man unter 'Globalisierung'?", "options": [...], "answer": 0},
-        {"score": 40, "question": "Was ist ein 'multinationales Unternehmen'?", "options": [...], "answer": 1},
-        {"score": 60, "question": "Was ist der Zweck der Welthandelsorganisation (WTO)?", "options": [...], "answer": 0},
-        {"score": 80, "question": "Was bedeutet der Begriff 'Freihandelsabkommen'?", "options": [...], "answer": 0}
+    "Berufsorientierung": [
+        {"frage": "Was gehört in eine Bewerbung?", "antworten": ["Lebenslauf", "Zeugnisse", "Liebesbrief", "Bewerbungsschreiben"], "richtig": 2, "punkte": 20},
+        {"frage": "Was ist ein Assessment-Center?", "antworten": ["Sportkurs", "Testverfahren zur Personalauswahl", "Freizeitcamp", "Wahlveranstaltung"], "richtig": 1, "punkte": 40},
+        {"frage": "Was zählt zu Soft Skills?", "antworten": ["Word-Kenntnisse", "Kommunikationsfähigkeit", "Excel", "Mathematik"], "richtig": 1, "punkte": 60},
+        {"frage": "Was macht ein gutes Vorstellungsgespräch aus?", "antworten": ["Spontanität", "Unpünktlichkeit", "Vorbereitung", "Frechheit"], "richtig": 2, "punkte": 80}
     ],
-    "Nachhaltigkeit": [
-        {"score": 20, "question": "Was bedeutet 'Nachhaltigkeit'?", "options": [...], "answer": 0},
-        {"score": 40, "question": "Was ist das Ziel der Agenda 2030 der Vereinten Nationen?", "options": [...], "answer": 1},
-        {"score": 60, "question": "Was bedeutet der Begriff 'Kreislaufwirtschaft'?", "options": [...], "answer": 1},
-        {"score": 80, "question": "Was versteht man unter 'ökologischem Fußabdruck'?", "options": [...], "answer": 0}
-    ]
-}
-
-st.set_page_config(page_title="WBS Quiz", layout="wide")
-st.title("📊 Quiz – WBS Klasse 11")
-
-if "answered" not in st.session_state:
-    st.session_state.answered = set()
-if "selected_question" not in st.session_state:
-    st.session_state.selected_question = None
-
-# 🧮 Matrix-Ansicht
-cols = st.columns(len(quiz_data))
-for col, category in zip(cols, quiz_data.keys()):
-    with col:
-        st.subheader(category)
-        for item in quiz_data[category]:
-            key = f"{category}_{item['score']}"
-            label = f"~~{item['score']} Punkte~~" if key in st.session_state.answered else f"{item['score']} Punkte"
-            if st.button(label, key=key):
-                if key not in st.session_state.answered:
-                    st.session_state.selected_question = (key, item)
-
-# 💡 Frage anzeigen
-if st.session_state.selected_question:
-    key, q = st.session_state.selected_question
-    st.markdown(f"### ❓ {q['question']}")
-    selected = st.radio("Antwortmöglichkeiten:", q["options"], index=None)
-    if selected is not None:
-        if q["options"].index(selected) == q["answer"]:
-            st.success("✅ Richtig!")
-        else:
-            st.error("❌ Leider falsch.")
-        st.session_state.answered.add(key)
-        st.session_state.selected_question = None
-        st.rerun()
+    "Verbraucherverhalten": [
+        {"frage": "Was ist nachhaltiger Konsum?", "antworten": ["Viel kaufen", "Billig einkaufen", "Umweltbewusst kaufen", "Gar nichts kaufen"], "richtig": 2, "punkte": 20},
+        {"frage": "Was bedeutet Fair Trade?", "antworten": ["Handel unter Freunden", "Faire Bedingungen für Produzenten", "Keine Steuern", "Schneller Versand"], "richtig": 1, "punkte": 40},
+        {"frage": "Wie beeinflussen Werbungen das Verhalten?", "antwort
