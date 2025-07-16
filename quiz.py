@@ -129,14 +129,16 @@ for i, kat in enumerate(["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierun
                 if st.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kat, p)
 
-# --- Frageanzeige ---
+# --- Frageanzeige mit Antwort- & Zurück-Button ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
+
     if frage_daten:
         st.markdown("---")
         st.subheader(f"📝 Frage aus {kategorie} – {punkte} Punkte")
         auswahl = st.radio(frage_daten["frage"], frage_daten["antworten"], key=f"radio_{kategorie}_{punkte}")
+
         col1, col2 = st.columns([1, 1])
         with col1:
             if st.button("✅ Antwort bestätigen", key=f"bestätigen_{kategorie}_{punkte}"):
@@ -153,4 +155,12 @@ if st.session_state["ausgewählte_frage"]:
                         st.session_state["punkte_B"] += punkte
                 else:
                     st.error("Leider falsch.")
-                    st.session
+                    st.session_state["beantwortet"][frage_id] = "falsch"
+
+                # Automatischer Gruppenwechsel
+                st.session_state["aktive_gruppe"] = "B" if gruppe == "A" else "A"
+                st.session_state["ausgewählte_frage"] = None
+
+        with col2:
+            if st.button("↩️ Zurück", key=f"zurueck_{kategorie}_{punkte}"):
+                st.session_state["ausgewählte_frage"] = None
