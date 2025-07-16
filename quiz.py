@@ -3,13 +3,13 @@ import streamlit as st
 from PIL import Image
 
 # Logo laden und oben rechts anzeigen
-logo = Image.open("logo.png")
+logo = Image.open("logo.svg")
 st.markdown(
     """
     <div style='display: flex; justify-content: flex-end;'>
         <img src='data:image/png;base64,{0}' width='150'/>
     </div>
-    """.format(st.image(logo, output_format="PNG").getvalue().decode("latin1")),
+    """.format(st.image(logo, output_format="SVG").getvalue().decode("latin1")),
     unsafe_allow_html=True
 )
 
