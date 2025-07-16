@@ -1,6 +1,6 @@
 import streamlit as st
 
-# --- Initialisierung ---
+# --- Session-State initialisieren ---
 if "beantwortet" not in st.session_state:
     st.session_state["beantwortet"] = {}
 if "ausgewählte_frage" not in st.session_state:
@@ -12,7 +12,7 @@ if "punkte_B" not in st.session_state:
 if "aktive_gruppe" not in st.session_state:
     st.session_state["aktive_gruppe"] = "A"
 
-# --- Reset-Button ---
+# --- Reset ---
 if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["beantwortet"] = {}
     st.session_state["ausgewählte_frage"] = None
@@ -20,43 +20,43 @@ if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["punkte_B"] = 0
     st.success("Quiz wurde zurückgesetzt.")
 
-# --- Gruppenanzeige & Auswahl ---
+# --- Punktestand & Gruppenauswahl ---
 st.markdown("### 🎯 Punktestand")
 st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
-st.radio("👥 Wer beantwortet gerade?", ["A", "B"], key="aktive_gruppe", horizontal=True)
+st.radio("👥 Aktive Gruppe", ["A", "B"], key="aktive_gruppe", horizontal=True)
 
-# --- Fragenstruktur ---
+# --- Fragen mit gestaffeltem Schwierigkeitsgrad ---
 fragen = {
-    ("Wirtschaftssysteme", 20): {"frage": "Was kennzeichnet die soziale Marktwirtschaft?", "antworten": ["Planwirtschaft", "Freie Marktwirtschaft", "Staatliche Eingriffe", "Subsistenzwirtschaft"], "richtig": 2},
-    ("Wirtschaftssysteme", 40): {"frage": "Wer gilt als Begründer der sozialen Marktwirtschaft?", "antworten": ["Adam Smith", "Karl Marx", "Ludwig Erhard", "John Keynes"], "richtig": 2},
-    ("Wirtschaftssysteme", 60): {"frage": "Was ist das Ziel des Stabilitätsgesetzes?", "antworten": ["Wirtschaftswachstum", "Preissteigerung", "Arbeitslosigkeit erhöhen", "Sozialabbau"], "richtig": 0},
-    ("Wirtschaftssysteme", 80): {"frage": "Was bedeutet Angebot und Nachfrage?", "antworten": ["Steuermechanismus", "Importregelung", "Produktionskosten", "Konsumsteuer"], "richtig": 0},
+    ("Wirtschaftssysteme", 20): {"frage": "Was ist eine Marktwirtschaft?", "antworten": ["Der Staat lenkt Angebot", "Preise sind staatlich festgelegt", "Angebot und Nachfrage bestimmen den Markt", "Waren sind gratis"], "richtig": 2},
+    ("Wirtschaftssysteme", 40): {"frage": "Was unterscheidet die soziale Marktwirtschaft von der freien?", "antworten": ["Mehr Wettbewerb", "Staat greift sozial ausgleichend ein", "Keine Privatunternehmen", "Preise werden festgelegt"], "richtig": 1},
+    ("Wirtschaftssysteme", 60): {"frage": "Welches Ziel verfolgt das Stabilitätsgesetz?", "antworten": ["Steigende Inflation", "Steigende Arbeitslosigkeit", "Wirtschaftliches Gleichgewicht", "Verringerung der Nachfrage"], "richtig": 2},
+    ("Wirtschaftssysteme", 80): {"frage": "Wie wirken sich Subventionen auf den Markt aus?", "antworten": ["Preis steigt", "Konkurrenz nimmt ab", "Produkte werden teurer", "Angebot wird gezielt gefördert"], "richtig": 3},
 
-    ("Arbeitswelt", 20): {"frage": "Was versteht man unter dualer Ausbildung?", "antworten": ["Nur Schule", "Nur Betrieb", "Kombination Schule und Betrieb", "Selbststudium"], "richtig": 2},
-    ("Arbeitswelt", 40): {"frage": "Welche Rechte haben Auszubildende?", "antworten": ["Kündigungsschutz", "Mindestlohn", "Urlaubsanspruch", "Beförderung"], "richtig": 2},
-    ("Arbeitswelt", 60): {"frage": "Was ist eine Tarifverhandlung?", "antworten": ["Verhandlung über Preise", "Verhandlung über Gehälter", "Verhandlung mit Kunden", "Private Vereinbarung"], "richtig": 1},
-    ("Arbeitswelt", 80): {"frage": "Was bedeutet Work-Life-Balance?", "antworten": ["Mehr Arbeit", "Weniger Freizeit", "Ausgewogenes Verhältnis", "Nur Freizeit"], "richtig": 2},
+    ("Arbeitswelt", 20): {"frage": "Was ist eine Ausbildung?", "antworten": ["Eine Freizeitbeschäftigung", "Berufliche Qualifikation mit Theorie & Praxis", "Ein Studium", "Ein Ehrenamt"], "richtig": 1},
+    ("Arbeitswelt", 40): {"frage": "Was ist der Unterschied zwischen dualer und schulischer Ausbildung?", "antworten": ["Duale Ausbildung findet im Betrieb & Schule statt", "Bei beiden wird studiert", "Nur die schulische Ausbildung ist bezahlt", "Keine Unterschiede"], "richtig": 0},
+    ("Arbeitswelt", 60): {"frage": "Welche Pflichten hat der Ausbildende laut BBiG?", "antworten": ["Urlaub gewähren", "Auszubildende fördern & unterweisen", "Gehalt verdoppeln", "Beförderung zusichern"], "richtig": 1},
+    ("Arbeitswelt", 80): {"frage": "Wie wirken Tarifverträge und Betriebsvereinbarungen zusammen?", "antworten": ["Tarifverträge gelten nie", "Betriebsvereinbarungen stehen über dem Gesetz", "Tarifverträge regeln Mindeststandards, Betriebe können ergänzen", "Tarifverträge gelten nur bei Beamten"], "richtig": 2},
 
-    ("Berufsorientierung", 20): {"frage": "Was gehört in eine vollständige Bewerbung?", "antworten": ["Liebesbrief", "Steuererklärung", "Lebenslauf & Anschreiben", "Geldschein"], "richtig": 2},
-    ("Berufsorientierung", 40): {"frage": "Was ist ein Assessment-Center?", "antworten": ["Freizeitcamp", "Testverfahren zur Personalauswahl", "Sportkurs", "Online-Shop"], "richtig": 1},
-    ("Berufsorientierung", 60): {"frage": "Was zählt zu Soft Skills?", "antworten": ["Excel", "Teamfähigkeit", "Mathematik", "Word-Kenntnisse"], "richtig": 1},
-    ("Berufsorientierung", 80): {"frage": "Was macht ein gutes Vorstellungsgespräch aus?", "antworten": ["Frechheit", "Unpünktlichkeit", "Vorbereitung", "Lügen"], "richtig": 2},
+    ("Berufsorientierung", 20): {"frage": "Was gehört in eine Bewerbung?", "antworten": ["Steuer-ID", "Liebesbrief", "Lebenslauf & Anschreiben", "Rechnungen"], "richtig": 2},
+    ("Berufsorientierung", 40): {"frage": "Was ist das Ziel eines Assessment-Centers?", "antworten": ["Urlaub buchen", "Mitarbeiter motivieren", "Persönlichkeit & Fähigkeiten prüfen", "Kosten sparen"], "richtig": 2},
+    ("Berufsorientierung", 60): {"frage": "Was zählt zu Soft Skills?", "antworten": ["Teamfähigkeit", "Technisches Wissen", "Sprachen", "Excel-Kenntnisse"], "richtig": 0},
+    ("Berufsorientierung", 80): {"frage": "Wie bereitest du dich auf ein Vorstellungsgespräch optimal vor?", "antworten": ["Unpünktlich sein", "Unterlagen ignorieren", "Firma recherchieren & Selbstpräsentation üben", "Nur warten"], "richtig": 2},
 
-    ("Verbraucherverhalten", 20): {"frage": "Was bedeutet nachhaltiger Konsum?", "antworten": ["Viel kaufen", "Gar nichts kaufen", "Billig einkaufen", "Umweltbewusst konsumieren"], "richtig": 3},
-    ("Verbraucherverhalten", 40): {"frage": "Was ist Fair Trade?", "antworten": ["Warenhandel im Einkaufszentrum", "Faire Bedingungen für Produzent:innen", "Preisregulierung", "Online-Shopping"], "richtig": 1},
-    ("Verbraucherverhalten", 60): {"frage": "Wie beeinflussen Werbungen das Verhalten?", "antworten": ["Gar nicht", "Manipulation", "Steuererklärung", "Baupläne"], "richtig": 1},
-    ("Verbraucherverhalten", 80): {"frage": "Was beschreibt den ökologischen Fußabdruck?", "antworten": ["CO₂-Bilanz einer Person", "Fußspuren im Wald", "Reifenprofil", "Verbraucherzertifikat"], "richtig": 0},
+    ("Verbraucherverhalten", 20): {"frage": "Was bedeutet nachhaltiger Konsum?", "antworten": ["Viel kaufen", "Spontan einkaufen", "Umweltbewusst & ressourcenschonend konsumieren", "Immer das Teuerste wählen"], "richtig": 2},
+    ("Verbraucherverhalten", 40): {"frage": "Was ist das Ziel von Fair Trade?", "antworten": ["Schnell handeln", "Produzenten faire Bedingungen bieten", "Preise erhöhen", "Rabatte garantieren"], "richtig": 1},
+    ("Verbraucherverhalten", 60): {"frage": "Wie beeinflusst Werbung unser Konsumverhalten?", "antworten": ["Gar nicht", "Manipulativ über Emotionen & Bedürfnisse", "Nur durch Logos", "Indirekt über TV-Zeit"], "richtig": 1},
+    ("Verbraucherverhalten", 80): {"frage": "Was beinhaltet der ökologische Fußabdruck?", "antworten": ["Fußgröße", "CO₂-Ausstoß durch Lebensweise", "Haushaltsbudget", "Kleiderwahl"], "richtig": 1},
 }
 
-# --- Layout: Breite Spalten + kleinere Kategorientitel ---
+# --- Layout: 4 gleichmäßige breite Spalten + kleiner Kategorientitel ---
 kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
 punkte_liste = [20, 40, 60, 80]
-spalten = st.columns([2, 2, 2, 2])  # Breite Darstellung
+spalten = st.columns([2, 2, 2, 2])  # Alle Spalten gleich breit
 
 for i, kat in enumerate(kategorien):
     with spalten[i]:
-        st.markdown(f"<h5 style='font-size:16px'>{kat}</h5>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:16px;height:40px'><b>{kat}</b></div>", unsafe_allow_html=True)
         for p in punkte_liste:
             frage_id = f"{kat}_{p}"
             status = st.session_state["beantwortet"].get(frage_id)
@@ -70,7 +70,7 @@ for i, kat in enumerate(kategorien):
                 if st.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kat, p)
 
-# --- Frageanzeige & Auswertung ---
+# --- Frage anzeigen und auswerten ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
