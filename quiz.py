@@ -20,15 +20,13 @@ if st.button("🔄 Quiz zurücksetzen"):
     st.session_state["punkte_B"] = 0
     st.success("Quiz wurde zurückgesetzt.")
 
-# --- Gruppenanzeige ---
+# --- Gruppenanzeige & Auswahl ---
 st.markdown("### 🎯 Punktestand")
 st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
-
-# --- Gruppenauswahl ---
 st.radio("👥 Wer beantwortet gerade?", ["A", "B"], key="aktive_gruppe", horizontal=True)
 
-# --- Fragenstruktur (jede Frage hat genau 4 Antworten) ---
+# --- Fragenstruktur ---
 fragen = {
     ("Wirtschaftssysteme", 20): {"frage": "Was kennzeichnet die soziale Marktwirtschaft?", "antworten": ["Planwirtschaft", "Freie Marktwirtschaft", "Staatliche Eingriffe", "Subsistenzwirtschaft"], "richtig": 2},
     ("Wirtschaftssysteme", 40): {"frage": "Wer gilt als Begründer der sozialen Marktwirtschaft?", "antworten": ["Adam Smith", "Karl Marx", "Ludwig Erhard", "John Keynes"], "richtig": 2},
@@ -51,14 +49,14 @@ fragen = {
     ("Verbraucherverhalten", 80): {"frage": "Was beschreibt den ökologischen Fußabdruck?", "antworten": ["CO₂-Bilanz einer Person", "Fußspuren im Wald", "Reifenprofil", "Verbraucherzertifikat"], "richtig": 0},
 }
 
-# --- Anzeige: vier nebeneinanderliegende breite Spalten ---
+# --- Layout: Breite Spalten + kleinere Kategorientitel ---
 kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
 punkte_liste = [20, 40, 60, 80]
-spalten = st.columns([5, 5, 5, 5])  # Breiter, aber alle sichtbar
+spalten = st.columns([2, 2, 2, 2])  # Breite Darstellung
 
 for i, kat in enumerate(kategorien):
     with spalten[i]:
-        st.subheader(kat)
+        st.markdown(f"<h5 style='font-size:16px'>{kat}</h5>", unsafe_allow_html=True)
         for p in punkte_liste:
             frage_id = f"{kat}_{p}"
             status = st.session_state["beantwortet"].get(frage_id)
@@ -72,7 +70,7 @@ for i, kat in enumerate(kategorien):
                 if st.button(label, key=frage_id):
                     st.session_state["ausgewählte_frage"] = (kat, p)
 
-# --- Frage anzeigen & Punktesystem anwenden ---
+# --- Frageanzeige & Auswertung ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
