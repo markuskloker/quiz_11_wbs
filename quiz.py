@@ -153,4 +153,4 @@ if st.session_state["ausgewählte_frage"]:
                 gruppe = st.session_state["aktive_gruppe"]
 
                 if index == frage_daten["richtig"]:
-                    st.success("Richtig
+                    st.success("Richtig")
