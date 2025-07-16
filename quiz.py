@@ -27,115 +27,123 @@ st.write(f"**Gruppe A**: {st.session_state['punkte_A']} Punkte")
 st.write(f"**Gruppe B**: {st.session_state['punkte_B']} Punkte")
 st.write(f"👥 Aktive Gruppe: **Gruppe {st.session_state['aktive_gruppe']}**")
 
-# --- Fragenstruktur (4×4 + Erklärung) ---
+# --- Fragenstruktur: 4 Kategorien × 4 Fragen mit Erklärung ---
 fragen = {
-    ("Wirtschaftssysteme", 20): {
-        "frage": "Was ist ein typisches Merkmal der freien Marktwirtschaft?",
-        "antworten": ["Staatliche Preiskontrolle", "Angebot und Nachfrage", "Zentraler Wirtschaftsplan", "Subventionierung aller Branchen"],
-        "richtig": 1,
-        "erklärung": "In einer freien Marktwirtschaft regeln Angebot und Nachfrage den Preis, nicht der Staat."
-    },
-    ("Wirtschaftssysteme", 40): {
-        "frage": "Was unterscheidet die soziale von der freien Marktwirtschaft?",
-        "antworten": ["Privatbesitz ist verboten", "Der Staat gleicht soziale Unterschiede aus", "Der Staat plant die Produktion", "Es gibt keinen Wettbewerb"],
-        "richtig": 1,
-        "erklärung": "Die soziale Marktwirtschaft ergänzt die freie durch sozialen Ausgleich, z. B. durch Sozialleistungen."
-    },
-    ("Wirtschaftssysteme", 60): {
-        "frage": "Was umfasst das magische Viereck?",
-        "antworten": ["Vier Wirtschaftszentren", "Vier Ministerien", "Vollbeschäftigung, Preisstabilität, Wachstum, Außenwirtschaftliches Gleichgewicht", "Subvention, Steuern, Schulden, Rente"],
+    # Soziale Marktwirtschaft
+    ("Soziale Marktwirtschaft", 20): {
+        "frage": "Welche Rolle spielt der Staat in der sozialen Marktwirtschaft?",
+        "antworten": ["Er greift nicht ein.", "Er plant die Produktion zentral.", "Er sorgt für Ausgleich und reguliert Wettbewerb.", "Er kontrolliert alle Unternehmen."],
         "richtig": 2,
-        "erklärung": "Diese vier Ziele gelten als gleichrangige Hauptziele der Wirtschaftspolitik."
+        "erklärung": "Der Staat greift ein, um sozialen Ausgleich zu schaffen und Wettbewerb zu sichern."
     },
-    ("Wirtschaftssysteme", 80): {
-        "frage": "Wie wirken sich Subventionen auf den Wettbewerb aus?",
-        "antworten": ["Sie steigern Konkurrenz", "Sie fördern gezielt bestimmte Marktteilnehmer", "Sie unterdrücken Innovation", "Sie senken die Steuerlast"],
+    ("Soziale Marktwirtschaft", 40): {
+        "frage": "Was versteht man unter 'Ordnungspolitik'?",
+        "antworten": ["Staatliche Preisbindung.", "Staatliche Gestaltung der Rahmenbedingungen.", "Direkte Produktionssteuerung.", "Abschaffung von Wettbewerb."],
         "richtig": 1,
-        "erklärung": "Subventionen unterstützen gezielt Unternehmen oder Branchen und können Marktungleichgewichte erzeugen."
+        "erklärung": "Ordnungspolitik definiert rechtliche Rahmenbedingungen zur Sicherung des Marktes."
     },
-    ("Arbeitswelt", 20): {
-        "frage": "Was bedeutet „duale Ausbildung“?",
-        "antworten": ["Nur Berufsschule", "Nur Betrieb", "Kombination von Schule und Betrieb", "Selbststudium mit Zertifikat"],
+    ("Soziale Marktwirtschaft", 60): {
+        "frage": "Welche Maßnahme gehört NICHT zur sozialen Marktwirtschaft?",
+        "antworten": ["Subventionen.", "Mindestlöhne.", "Zentrale Produktionsplanung.", "Sozialversicherungen."],
         "richtig": 2,
-        "erklärung": "Das duale System kombiniert praktisches Lernen im Betrieb mit Theorie in der Berufsschule."
+        "erklärung": "Zentrale Planung ist ein Element der Planwirtschaft."
     },
-    ("Arbeitswelt", 40): {
-        "frage": "Was ist ein Berichtsheft?",
-        "antworten": ["Gehaltsbescheinigung", "Ausbildungsnachweis", "Krankmeldung", "Arbeitsvertrag"],
-        "richtig": 1,
-        "erklärung": "Das Berichtsheft dokumentiert regelmäßig die Inhalte der Ausbildung für den Ausbildungsbetrieb."
-    },
-    ("Arbeitswelt", 60): {
-        "frage": "Was regelt das Berufsbildungsgesetz?",
-        "antworten": ["Steuern und Abgaben", "Tarifverträge", "Pflichten und Rechte in der Ausbildung", "Beförderungsregeln im Unternehmen"],
+    ("Soziale Marktwirtschaft", 80): {
+        "frage": "Was ist ein Ziel der sozialen Marktwirtschaft?",
+        "antworten": ["Abschaffung des Wettbewerbs.", "Förderung von Monopolen.", "Verbindung von Freiheit und Sicherheit.", "Zentralisierung der Wirtschaft."],
         "richtig": 2,
-        "erklärung": "Das BBiG ist die zentrale rechtliche Grundlage für die Berufsausbildung in Deutschland."
+        "erklärung": "Sie verbindet Marktfreiheit mit sozialem Ausgleich."
     },
-    ("Arbeitswelt", 80): {
-        "frage": "Welche Konsequenzen drohen bei Verstoß gegen Ausbildungspflichten?",
-        "antworten": ["Nichts", "Kündigung durch Berufsschule", "Bußgeld und Entzug der Ausbildungsbefugnis", "Rentenstreichung"],
+
+    # Wirtschaftswachstum
+    ("Wirtschaftswachstum", 20): {
+        "frage": "Welche Kennzahl misst das Wirtschaftswachstum?",
+        "antworten": ["Inflationsrate", "Bruttoinlandsprodukt (BIP)", "Arbeitslosenquote", "Handelsbilanz"],
+        "richtig": 1,
+        "erklärung": "Das BIP zeigt den Gesamtwert aller produzierten Güter und Dienstleistungen."
+    },
+    ("Wirtschaftswachstum", 40): {
+        "frage": "Was bedeutet qualitatives Wachstum?",
+        "antworten": ["Mehr Produktion.", "Wachstum mit Nachhaltigkeit.", "Wachstum durch Subventionen.", "Wachstum nur in Industrie."],
+        "richtig": 1,
+        "erklärung": "Es soll umweltverträglich und nachhaltig sein."
+    },
+    ("Wirtschaftswachstum", 60): {
+        "frage": "Was ist ein Problem des Wirtschaftswachstums?",
+        "antworten": ["Immer höhere Arbeitslosigkeit.", "Umweltzerstörung und Ressourcenverbrauch.", "Gleichmäßige Branchenverteilung.", "Weniger Innovation."],
+        "richtig": 1,
+        "erklärung": "Wachstum kann die Umwelt belasten und Ressourcen verbrauchen."
+    },
+    ("Wirtschaftswachstum", 80): {
+        "frage": "Was fördert nachhaltiges Wachstum?",
+        "antworten": ["Ausbeutung von Ressourcen.", "Soziale und ökologische Verantwortung.", "Kurzfristige Gewinne.", "Verzicht auf Zukunftsperspektive."],
+        "richtig": 1,
+        "erklärung": "Nachhaltigkeit bezieht zukünftige Generationen mit ein."
+    },
+
+    # Konjunktur
+    ("Konjunktur", 20): {
+        "frage": "Welche Phase gehört NICHT zum Konjunkturzyklus?",
+        "antworten": ["Aufschwung", "Boom", "Deflation", "Rezession"],
         "richtig": 2,
-        "erklärung": "Gesetzlich kann ein Ausbilder bei Pflichtverletzung sanktioniert und Lizenz entzogen werden."
+        "erklärung": "Deflation beschreibt Preisverfall, keine Konjunkturphase."
     },
-    ("Berufsorientierung", 20): {
-        "frage": "Was gehört in eine vollständige Bewerbung?",
-        "antworten": ["Steuer-ID", "Lebenslauf & Anschreiben", "Mietvertrag", "Zeugnisse der Geschwister"],
-        "richtig": 1,
-        "erklärung": "Die klassischen Bestandteile sind Anschreiben, Lebenslauf und relevante Zeugnisse."
-    },
-    ("Berufsorientierung", 40): {
-        "frage": "Was ist das Ziel eines Assessment-Centers?",
-        "antworten": ["Firmenvorstellung", "Stärken & Schwächen der Bewerber erkennen", "Gehaltsverhandlung", "Mitarbeiterfotos machen"],
-        "richtig": 1,
-        "erklärung": "In Assessment-Centern werden Kompetenzen wie Kommunikation oder Problemlösen geprüft."
-    },
-    ("Berufsorientierung", 60): {
-        "frage": "Was versteht man unter Soft Skills?",
-        "antworten": ["Excel-Kenntnisse", "Technische Fähigkeiten", "Zwischenmenschliche Kompetenzen", "Logikaufgaben lösen"],
+    ("Konjunktur", 40): {
+        "frage": "Was geschieht in der Boom-Phase?",
+        "antworten": ["Hohe Arbeitslosigkeit", "Sinkende Nachfrage", "Überhitzung und steigende Preise", "Rückgang der Investitionen"],
         "richtig": 2,
-        "erklärung": "Soft Skills umfassen soziale und persönliche Fähigkeiten wie Teamwork und Empathie."
+        "erklärung": "Die Wirtschaft läuft auf Hochtouren, Nachfrage und Preise steigen."
     },
-    ("Berufsorientierung", 80): {
-        "frage": "Wie sollte man mit eigenen Schwächen im Bewerbungsgespräch umgehen?",
-        "antworten": ["Verheimlichen", "Ehrlich benennen und Lösung beschreiben", "Lustig machen", "Ignorieren"],
+    ("Konjunktur", 60): {
+        "frage": "Was hilft gegen eine Rezession?",
+        "antworten": ["Steuererhöhung", "Ausgabensenkung", "Investitionen in Infrastruktur", "Zinserhöhung"],
+        "richtig": 2,
+        "erklärung": "Öffentliche Investitionen kurbeln Nachfrage und Beschäftigung an."
+    },
+    ("Konjunktur", 80): {
+        "frage": "Was bedeutet antizyklische Fiskalpolitik?",
+        "antworten": ["Zölle einführen", "Steuern in Rezession erhöhen", "Ausgaben entgegen Konjunkturentwicklung steuern", "Konsum senken"],
+        "richtig": 2,
+        "erklärung": "Ausgaben werden antizyklisch angepasst, um Konjunktur zu stabilisieren."
+    },
+
+    # Europäische Wirtschaftsunion
+    ("Europäische Wirtschaftsunion", 20): {
+        "frage": "Was ist Ziel der Europäischen Wirtschafts- und Währungsunion?",
+        "antworten": ["Zölle einführen", "Freier Handel und gemeinsame Währung", "Wettbewerb abschaffen", "Zentraler Wirtschaftsplan"],
         "richtig": 1,
-        "erklärung": "Selbstreflexion und Lösungsansätze zeigen Professionalität und Lernbereitschaft."
+        "erklärung": "Sie erleichtert Handel und stärkt Integration durch den Euro."
     },
-    ("Verbraucherverhalten", 20): {
-        "frage": "Was ist nachhaltiger Konsum?",
-        "antworten": ["Unüberlegtes Kaufen", "Ökologisch und sozial verantwortliches Einkaufen", "Luxuskäufe", "Rabatt-Shopping"],
+    ("Europäische Wirtschaftsunion", 40): {
+        "frage": "Welche Institution steuert die Geldpolitik der EU?",
+        "antworten": ["EU-Kommission", "EuGH", "EZB", "Europäischer Rat"],
+        "richtig": 2,
+        "erklärung": "Die EZB ist zuständig für Preisstabilität und Geldpolitik."
+    },
+    ("Europäische Wirtschaftsunion", 60): {
+        "frage": "Welche Voraussetzung gilt für Euro-Beitritt?",
+        "antworten": ["NATO-Mitgliedschaft", "Hohe Exporte", "Stabiles Preisniveau und geringe Verschuldung", "Bevölkerung über 10 Mio."],
+        "richtig": 2,
+        "erklärung": "Die Konvergenzkriterien sichern finanzielle Stabilität im Euro-Raum."
+    },
+    ("Europäische Wirtschaftsunion", 80): {
+        "frage": "Was ist ein Vorteil der gemeinsamen Währung?",
+        "antworten": ["Mehr Wechselkursrisiken", "Erleichterung des Handels", "Nationale Geldpolitik", "Geringere Integration"],
         "richtig": 1,
-        "erklärung": "Ziel ist eine bewusste Entscheidung zugunsten der Umwelt und fairer Produktion."
-    },
-    ("Verbraucherverhalten", 40): {
-        "frage": "Was bedeutet Fair Trade?",
-        "antworten": ["Nur Bio-Produkte", "Handel zu fairen Bedingungen für Produzenten", "Billige Produktion", "Qualitätslabel für Maschinen"],
-        "richtig": 1,
-        "erklärung": "Fair Trade unterstützt Produzenten mit Mindestpreisen und sozialen Standards."
-    },
-    ("Verbraucherverhalten", 60): {
-        "frage": "Wie wirkt Werbung auf Konsumenten?",
-        "antworten": ["Informativ und rational", "Manipulativ über Emotionen", "Nicht relevant", "Verboten beim Online-Kauf"],
-        "richtig": 1,
-        "erklärung": "Werbung spricht oft unbewusste Bedürfnisse an und beeinflusst das Kaufverhalten."
-    },
-    ("Verbraucherverhalten", 80): {
-        "frage": "Was bezeichnet der ökologische Fußabdruck?",
-        "antworten": ["CO₂-Ausstoß und Ressourcenverbrauch einer Person", "Schuhgröße", "Einkaufsbudget", "Steuerklasse"],
-        "richtig": 0,
-        "erklärung": "Er misst, wie viel Umwelt durch individuellen Lebensstil belastet wird."
+        "erklärung": "Der Euro ermöglicht reibungslosen Handel ohne Wechselkursrisiken."
     },
 }
 
-# --- Spaltenlayout ---
+# --- Frageauswahl-Layout ---
 spalten = st.columns([2, 2, 2, 2])
-kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbraucherverhalten"]
+kategorien = ["Soziale Marktwirtschaft", "Wirtschaftswachstum", "Konjunktur", "Europäische Wirtschaftsunion"]
+punkte_liste = [20, 40, 60, 80]
 
-for i, kat in enumerate(kategorien):
+for i, kategorie in enumerate(kategorien):
     with spalten[i]:
-        st.markdown(f"<div style='font-size:16px;height:40px'><b>{kat}</b></div>", unsafe_allow_html=True)
-        for p in [20, 40, 60, 80]:
-            frage_id = f"{kat}_{p}"
+        st.markdown(f"<div style='font-size:16px;height:40px'><b>{kategorie}</b></div>", unsafe_allow_html=True)
+        for p in punkte_liste:
+            frage_id = f"{kategorie}_{p}"
             status = st.session_state["beantwortet"].get(frage_id)
             label = f"{p} Punkte"
 
@@ -145,9 +153,9 @@ for i, kat in enumerate(kategorien):
                 st.button(f"~~{label}~~ ❌", key=frage_id, disabled=True)
             else:
                 if st.button(label, key=frage_id):
-                    st.session_state["ausgewählte_frage"] = (kat, p)
+                    st.session_state["ausgewählte_frage"] = (kategorie, p)
 
-# --- Frageanzeige ---
+# --- Frageanzeige & Auswertung ---
 if st.session_state["ausgewählte_frage"]:
     kategorie, punkte = st.session_state["ausgewählte_frage"]
     frage_daten = fragen.get((kategorie, punkte))
@@ -155,6 +163,7 @@ if st.session_state["ausgewählte_frage"]:
     if frage_daten:
         st.markdown("---")
         st.subheader(f"📝 Frage aus {kategorie} – {punkte} Punkte")
+
         auswahl = st.radio(frage_daten["frage"], frage_daten["antworten"], key=f"radio_{kategorie}_{punkte}")
         col1, col2 = st.columns([1, 1])
 
@@ -164,8 +173,9 @@ if st.session_state["ausgewählte_frage"]:
                 frage_id = f"{kategorie}_{punkte}"
                 gruppe = st.session_state["aktive_gruppe"]
 
+                # ✅ Antwortbewertung
                 if index == frage_daten["richtig"]:
-                    st.success("Richtig! 🎉")
+                    st.success("Richtig!")
                     st.session_state["beantwortet"][frage_id] = "richtig"
                     if gruppe == "A":
                         st.session_state["punkte_A"] += punkte
@@ -175,7 +185,7 @@ if st.session_state["ausgewählte_frage"]:
                     st.error("Leider falsch.")
                     st.session_state["beantwortet"][frage_id] = "falsch"
 
-                # ✅ Erklärung anzeigen
+                # 📚 Erklärung anzeigen
                 richtige_antwort = frage_daten["antworten"][frage_daten["richtig"]]
                 erklärung = frage_daten.get("erklärung", "")
                 st.info(f"👉 Richtige Antwort: **{richtige_antwort}**\n\n📚 **Warum?** {erklärung}")
