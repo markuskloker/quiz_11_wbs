@@ -134,7 +134,7 @@ kategorien = ["Wirtschaftssysteme", "Arbeitswelt", "Berufsorientierung", "Verbra
 for i, kat in enumerate(kategorien):
     with spalten[i]:
         st.markdown(f"<div style='font-size:16px;height:40px'><b>{kat}</b></div>", unsafe_allow_html=True)
-                for p in [20, 40, 60, 80]:
+        for p in [20, 40, 60, 80]:
             frage_id = f"{kat}_{p}"
             status = st.session_state["beantwortet"].get(frage_id)
             label = f"{p} Punkte"
