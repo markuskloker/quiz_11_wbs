@@ -23,4 +23,35 @@ quiz_data = {
     "Verbraucherverhalten": [
         {"frage": "Was ist nachhaltiger Konsum?", "antworten": ["Viel kaufen", "Billig einkaufen", "Umweltbewusst kaufen", "Gar nichts kaufen"], "richtig": 2, "punkte": 20},
         {"frage": "Was bedeutet Fair Trade?", "antworten": ["Handel unter Freunden", "Faire Bedingungen für Produzenten", "Keine Steuern", "Schneller Versand"], "richtig": 1, "punkte": 40},
-        {"frage": "Wie beeinflussen Werbungen das Verhalten?", "antwort
+        {"frage": "Wie beeinflussen Werbungen das Verhalten?", "antworten": ["Gar nicht", "Durch Informationen", "Durch Manipulation", "Durch Preisänderung"], "richtig": 2, "punkte": 60},
+        {"frage": "Was ist ein ökologischer Fußabdruck?", "antworten": ["Ein Schuhabdruck", "CO₂-Bilanz einer Person", "Umweltmarke", "Verbraucherzertifikat"], "richtig": 1, "punkte": 80}
+    ]
+}
+
+# Session-State für beantwortete Fragen
+if "beantwortet" not in st.session_state:
+    st.session_state["beantwortet"] = []
+
+st.title("🎓 WBS Quiz – Klasse 11")
+
+# Durchlaufen der Kategorien
+for kategorie, fragen in quiz_data.items():
+    st.header(kategorie)
+
+    for idx, frage in enumerate(fragen):
+        frage_id = f"{kategorie}_{idx}"
+        if frage_id in st.session_state["beantwortet"]:
+            st.markdown(f"~~{frage['frage']}~~ ✅")
+            continue
+
+        st.subheader(f"💡 Punkte: {frage['punkte']}")
+        st.write(frage["frage"])
+        auswahl = st.radio("Antwort auswählen", frage["antworten"], key=frage_id)
+
+        if st.button("Antwort bestätigen", key=f"button_{frage_id}"):
+            if frage["antworten"].index(auswahl) == frage["richtig"]:
+                st.success("Richtig! 🎉")
+            else:
+                st.error("Leider falsch. 😕")
+            st.session_state["beantwortet"].append(frage_id)
+
