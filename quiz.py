@@ -1,5 +1,18 @@
 import streamlit as st
 
+from PIL import Image
+
+# Logo laden und oben rechts anzeigen
+logo = Image.open("logo.png")
+st.markdown(
+    """
+    <div style='display: flex; justify-content: flex-end;'>
+        <img src='data:image/png;base64,{0}' width='150'/>
+    </div>
+    """.format(st.image(logo, output_format="PNG").getvalue().decode("latin1")),
+    unsafe_allow_html=True
+)
+
 # --- Session-State Initialisierung ---
 if "beantwortet" not in st.session_state:
     st.session_state["beantwortet"] = {}
